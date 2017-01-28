@@ -16,7 +16,6 @@ def set_logging_state(chat_obj, active):
 
 
 class DispatcherView(View):
-    chat = None
 
     def dispatch(self, request, *args, **kwargs):
         body_unicode = request.body.decode('utf-8')
@@ -29,13 +28,14 @@ class DispatcherView(View):
         chat_obj.title = self.chat.get('title')
         chat_obj.type = self.chat.get('type')
 
-        if message['text'] == '/stop':
+        text = message.get('text')
+        if text == '/stop':
             set_logging_state(chat_obj, active=False)
             return JsonResponse(data=self.create_response(response_message='Logging disabled.'), status=200)
-        elif message['text'] == '/start':
+        elif text == '/start':
             set_logging_state(chat_obj, active=True)
             return JsonResponse(data=self.create_response(response_message='Logging enabled.'), status=200)
-        else:
+        elif text:
             user_obj, _ = User.objects.get_or_create(id=user.get('id'))
             user_obj.first_name = user.get('first_name')
             user_obj.last_name = user.get('last_name')
@@ -47,7 +47,7 @@ class DispatcherView(View):
                                                                chat=chat_obj,
                                                                user=user_obj,
                                                                date=datetime.fromtimestamp(message.get('date')))
-                message_obj.text = message.get('text')
+                message_obj.text = text
                 message_obj.save()
 
         return JsonResponse(data={}, status=200)
