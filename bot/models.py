@@ -12,6 +12,12 @@ class Chat(models.Model):
     id = models.BigIntegerField(primary_key=True)
     title = models.CharField(max_length=255, null=True, blank=True)
     type = models.CharField(max_length=31, null=False, blank=False)
+    logging = models.BooleanField(default=True)
+
+
+class MessageManager(models.Manager):
+    def get_queryset(self):
+        return super(MessageManager, self).get_queryset().order_by('message_id')
 
 
 class Message(models.Model):
@@ -20,6 +26,8 @@ class Message(models.Model):
     user = models.ForeignKey(User, related_name='messages')
     date = models.DateTimeField()
     text = models.CharField(max_length=4095)
+
+    objects = MessageManager()
 
     class Meta:
         unique_together = (('chat', 'user', 'message_id'),)
