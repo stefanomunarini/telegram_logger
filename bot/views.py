@@ -45,8 +45,8 @@ class DispatcherView(View):
             if chat_obj.logging:
                 message_obj, _ = Message.objects.get_or_create(message_id=message.get('message_id'),
                                                                chat=chat_obj,
-                                                               user=user_obj)
-                message_obj.data = datetime.fromtimestamp(message.get('date'))
+                                                               user=user_obj,
+                                                               date=datetime.fromtimestamp(message.get('date')))
                 message_obj.text = message.get('text')
                 message_obj.save()
 
@@ -55,6 +55,7 @@ class DispatcherView(View):
     def create_response(self, response_message):
         return {
             'chat_id': self.chat.get('id'),
-            'text': response_message
+            'text': response_message,
+            'method': 'sendMessage'
         }
 
