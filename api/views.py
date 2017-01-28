@@ -1,7 +1,8 @@
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 
-from bot.models import Message, Chat
+from bot.models import Message, Chat, User
 
 
 class ChatMessageListView(ListView):
@@ -13,7 +14,9 @@ class ChatMessageListView(ListView):
 
     def get_queryset(self):
         self.queryset = super(ChatMessageListView, self).get_queryset()
-        return self.queryset.filter(chat=Chat.objects.get(id=self.kwargs.get('chat_id')))
+        if self.kwargs.get('user_id'):
+            self.queryset.filter(user=get_object_or_404(User, id=self.kwargs.get('user_id')))
+        return self.queryset.filter(chat=get_object_or_404(Chat, id=self.kwargs.get('chat_id')))
 
     def serialize_messages(self):
         return {
