@@ -31,10 +31,10 @@ class DispatcherView(View):
         text = message.get('text')
         if text == '/stop':
             set_logging_state(chat_obj, active=False)
-            return JsonResponse(data=self.create_response(response_message='Logging disabled.'), status=200)
+            return JsonResponse(data=self.create_response(response_message='Logging disabled.'))
         elif text == '/start':
             set_logging_state(chat_obj, active=True)
-            return JsonResponse(data=self.create_response(response_message='Logging enabled.'), status=200)
+            return JsonResponse(data=self.create_response(response_message='Logging enabled.'))
         elif text:
             user_obj, _ = User.objects.get_or_create(id=user.get('id'))
             user_obj.first_name = user.get('first_name')
@@ -50,7 +50,7 @@ class DispatcherView(View):
                 message_obj.text = text
                 message_obj.save()
 
-        return JsonResponse(data={}, status=200)
+        return JsonResponse(data={})
 
     def create_response(self, response_message):
         return {
