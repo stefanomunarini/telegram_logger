@@ -14,9 +14,19 @@ class ChatMessageListView(ListView):
 
     def get_queryset(self):
         self.queryset = super(ChatMessageListView, self).get_queryset()
-        if self.kwargs.get('user_id'):
-            self.queryset.filter(user=get_object_or_404(User, id=self.kwargs.get('user_id')))
-        return self.queryset.filter(chat=get_object_or_404(Chat, id=self.kwargs.get('chat_id')))
+        user_id = None
+        chat_id = None
+        if self.request.method == 'GET':
+            user_id = self.request.GET.get('user_id')
+            chat_id = self.request.GET.get('chat_id')
+        elif self.request.method == 'POST':
+            user_id = self.request.POST.get('user_id')
+            chat_id = self.request.POST.get('chat_id')
+        if user_id:
+            self.queryset = self.queryset.filter(user=get_object_or_404(User, id=user_id))
+        if chat_id:
+            return self.queryset.filter(chat=get_object_or_404(Chat, id=chat_id))
+        return self.model.objects.none()
 
     def serialize_messages(self):
         return {

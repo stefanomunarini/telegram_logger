@@ -35,6 +35,8 @@ class DispatcherView(View):
         elif text == '/start':
             set_logging_state(chat_obj, active=True)
             return JsonResponse(data=self.create_response(response_message='Logging enabled.'))
+        elif text == '/start':
+            return JsonResponse(data=self.create_response(response_message='Chat id: {}'.format(self.chat.get('id'))))
         elif text:
             user_obj, _ = User.objects.get_or_create(id=user.get('id'))
             user_obj.first_name = user.get('first_name')
