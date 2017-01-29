@@ -2,6 +2,7 @@ import json
 import logging
 from datetime import datetime
 
+from django.http import HttpResponse
 from django.http import JsonResponse
 from django.views import View
 
@@ -20,7 +21,14 @@ class DispatcherView(View):
     def dispatch(self, request, *args, **kwargs):
         body_unicode = request.body.decode('utf-8')
         data = json.loads(body_unicode.rstrip('\n'))
+
         message = data.get('message')
+        if not message:
+            # A message has been updated.
+            message = data.get('edited_message')
+            if not message:
+                return HttpResponse()
+
         user = message.get('from')
         self.chat = message.get('chat')
 
@@ -52,7 +60,7 @@ class DispatcherView(View):
                 message_obj.text = text
                 message_obj.save()
 
-        return JsonResponse(data={})
+        return HttpResponse()
 
     def create_response(self, response_message):
         return {
