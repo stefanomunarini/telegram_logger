@@ -15,7 +15,6 @@ class SearchView(FormMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'POST':
-
             form = self.form_class(request.POST)
             if form.is_valid():
 
@@ -31,7 +30,7 @@ class SearchView(FormMixin, TemplateView):
                 return render(request, self.template_name, context=self.get_response_context())
             return render(request, self.template_name,
                           context=self.get_context_data(**{'form': form}))
-        return render(request, self.template_name, context=self.get_context_data())
+        return super(SearchView, self).dispatch(request, *args, **kwargs)
 
     def get_response_context(self):
         context = {
