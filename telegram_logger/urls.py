@@ -23,5 +23,5 @@ from telegram_logger.credentials.private_keys import BOT_TOKEN
 urlpatterns = [
     url(r'^bot/{}'.format(BOT_TOKEN), include(bot_urls, namespace='bot')),
     url(r'^bot/{}/api/v1/'.format(BOT_TOKEN), include(api_urls, namespace='api')),
-    url(r'^search/', include(search_urls, namespace='search')),
+    url(r'', include(search_urls, namespace='search')),
 ]
