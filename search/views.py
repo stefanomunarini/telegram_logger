@@ -15,15 +15,14 @@ class SearchView(FormMixin, TemplateView):
 
     def dispatch(self, request, *args, **kwargs):
         if request.method == 'POST':
+
             form = self.form_class(request.POST)
             if form.is_valid():
-                if self.request.is_secure():
-                    url = 'https://'
-                else:
-                    url = 'http://'
-                url += self.request.META.get('HTTP_HOST') + str(reverse('api:messages-for-chat'))
 
-                self.response = requests.post(url, data=request.POST)
+                api_url = 'https://' if self.request.is_secure() else 'http://'
+                api_url += self.request.META.get('HTTP_HOST') + str(reverse('api:messages-for-chat'))
+
+                self.response = requests.post(api_url, data=form.cleaned_data)
 
                 if self.response.status_code != 200:
                     return render(request, self.template_name,
