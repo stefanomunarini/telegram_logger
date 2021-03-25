@@ -27,7 +27,7 @@ Pygments==2.2.0
 python-dateutil==2.6.0
 pytoml==0.1.11
 pytz==2016.10
-PyYAML==3.12
+PyYAML==5.4
 requests==2.13.0
 simplegeneric==0.8.1
 six==1.10.0
