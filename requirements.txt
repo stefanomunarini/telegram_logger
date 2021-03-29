@@ -23,7 +23,7 @@ pickleshare==0.7.4
 prompt-toolkit==1.0.9
 psycopg2==2.6.2
 ptyprocess==0.5.1
-Pygments==2.2.0
+Pygments==2.7.4
 python-dateutil==2.6.0
 pytoml==0.1.11
 pytz==2016.10
